@@ -231,8 +231,8 @@ void rating(int attempts, double elapsed_time, int correctGuesses, int incorrect
     // Штрафные очки за неправильные буквы
     int penaltyForIncorrectGuesses = incorrectGuesses * 5;
 
-    // Очки за время (мы вычитаем очки за каждую секунду, если хотим усложнить задачу)
-    int timePenalty = static_cast<int>(elapsed_time);  // Минусуем секунды из времени
+    // Очки за время (вычитаем очки за каждую секунду)
+    int timePenalty = elapsed_time;  // Минусуем секунды из времени
 
     // Итоговые очки
     int totalPoints = pointsForCorrectGuesses - penaltyForIncorrectGuesses - timePenalty;
@@ -245,7 +245,7 @@ void rating(int attempts, double elapsed_time, int correctGuesses, int incorrect
     std::cout << "Итоговый счёт: " << totalPoints << " очков.\n";
 }
 
-// Основная логика игры
+// Основная логика игры, дополненная подсчётом рейтинга
 void playGame()
 {
     chooseDifficulty();                 // Выбор сложности
@@ -317,7 +317,6 @@ void playGame()
 
     // Вызов функции для подсчёта рейтинга
     rating(attempts, std::difftime(stop_time, start_time), correctGuesses, incorrectGuesses);
-
 }
 
 // Основная функция
