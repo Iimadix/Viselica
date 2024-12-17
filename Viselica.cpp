@@ -222,10 +222,27 @@ void chooseWordTheme()
     // Реализация выбора темы
 }
 
-// Ачивки/рейтинг
-void achievementsOrRating()
+// Рейтинг
+void rating(int attempts, double elapsed_time, int correctGuesses, int incorrectGuesses)
 {
-    // Выбор между системой ачивок или рейтинга
+    // Очки за правильные буквы
+    int pointsForCorrectGuesses = correctGuesses * 10;
+
+    // Штрафные очки за неправильные буквы
+    int penaltyForIncorrectGuesses = incorrectGuesses * 5;
+
+    // Очки за время (мы вычитаем очки за каждую секунду, если хотим усложнить задачу)
+    int timePenalty = static_cast<int>(elapsed_time);  // Минусуем секунды из времени
+
+    // Итоговые очки
+    int totalPoints = pointsForCorrectGuesses - penaltyForIncorrectGuesses - timePenalty;
+
+    // Печатаем результаты
+    std::cout << "Рейтинг:\n";
+    std::cout << "Правильные буквы: " << correctGuesses << " (+" << pointsForCorrectGuesses << " очков)\n";
+    std::cout << "Неправильные буквы: " << incorrectGuesses << " (-" << penaltyForIncorrectGuesses << " очков)\n";
+    std::cout << "Время: " << elapsed_time << " секунд (-" << timePenalty << " очков)\n";
+    std::cout << "Итоговый счёт: " << totalPoints << " очков.\n";
 }
 
 // Основная логика игры
@@ -236,12 +253,13 @@ void playGame()
     const char* word = getRandomWord(language); // Получение случайного слова
     startTimer();  // Запуск таймера
 
-
     std::string wordToGuess(word);
     int wordLength = wordToGuess.length();
     std::string guessedWord(wordLength, '_');
     std::string guessedLetters;
     int attempts = 6;
+    int correctGuesses = 0;  // Количество угаданных букв
+    int incorrectGuesses = 0;  // Количество неправильных букв
 
     std::cout << "Загаданное слово (для теста): " << wordToGuess << "\n";
     std::cout << "Попробуйте угадать слово!\n";
@@ -273,13 +291,21 @@ void playGame()
             }
         }
 
-        if (!correctGuess)
+        if (correctGuess)
         {
+            correctGuesses++;  // Увеличиваем счётчик правильных букв
+        }
+        else
+        {
+            incorrectGuesses++;  // Увеличиваем счётчик неправильных букв
             attempts--;
             drawHangman(attempts);
         }
     }
 
+    stopTimer();  // Остановка таймера
+
+    // Печать результатов игры
     if (guessedWord == wordToGuess)
     {
         std::cout << "Поздравляем! Вы угадали слово: " << wordToGuess << "\n";
@@ -289,7 +315,8 @@ void playGame()
         std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << "\n";
     }
 
-    stopTimer();  // Остановка таймера
+    // Вызов функции для подсчёта рейтинга
+    rating(attempts, std::difftime(stop_time, start_time), correctGuesses, incorrectGuesses);
 
 }
 
