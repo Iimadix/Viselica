@@ -1,15 +1,29 @@
+// Апдейты и тудушки
+// UPDATE Сделал игру по темам слова
+// UPDATE Пофиксил русский язык
+// TODO Надо доделать базы данных слов, чтоб отличались
+// TODO Надо добавить+доделать оформление и описание каждого режима
+// TODO Адекватно сделать комментарии
+
+
+// Основные библиотеки для работы кода
 #include <iostream>
 #include <string>
 #include <ctime>
+
+// Доп функция, чтобы работал русский язык
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 // База слов для русского языка
 const int RU_WORDS_COUNT_EASY = 5;
 const int RU_WORDS_COUNT_MEDIUM = 5;
 const int RU_WORDS_COUNT_HARD = 5;
 
-const char* ru_words_easy[RU_WORDS_COUNT_EASY] = { "кот", "дом", "лес", "мир", "сок" };
-const char* ru_words_medium[RU_WORDS_COUNT_MEDIUM] = { "яблоко", "банан", "вишня", "дерево", "собака" };
-const char* ru_words_hard[RU_WORDS_COUNT_HARD] = { "программирование", "компьютер", "интеллект", "механизм", "автомобиль" };
+const char* ru_words_easy[RU_WORDS_COUNT_EASY] = { "лед", "дом", "лес", "луч", "сок" };
+const char* ru_words_medium[RU_WORDS_COUNT_MEDIUM] = { "пламя", "берег", "радуга", "дерево", "собака" };
+const char* ru_words_hard[RU_WORDS_COUNT_HARD] = { "программирование", "компьютер", "путешествие", "механизм", "автомобиль" };
 
 // База слов для английского языка
 const int EN_WORDS_COUNT_EASY = 5;
@@ -19,6 +33,18 @@ const int EN_WORDS_COUNT_HARD = 5;
 const char* en_words_easy[EN_WORDS_COUNT_EASY] = { "cat", "dog", "sun", "car", "pen" };
 const char* en_words_medium[EN_WORDS_COUNT_MEDIUM] = { "apple", "banana", "cherry", "grape", "orange" };
 const char* en_words_hard[EN_WORDS_COUNT_HARD] = { "programming", "computer", "intelligence", "mechanism", "automobile" };
+
+// Темы слов
+const int CAR_BRANDS_COUNT = 5;
+const int EGYPT_COUNT = 5;
+const int SPACE_COUNT = 5;
+
+const char* car_brands[CAR_BRANDS_COUNT] = { "toyota", "ford", "bmw", "audi", "honda" };
+const char* egypt_words[EGYPT_COUNT] = { "фараон", "пирамида", "сфинкс", "жрец", "анубис" };
+const char* space_words[SPACE_COUNT] = { "галактика", "космос", "астероид", "планета", "звезда" };
+
+// Глобальная переменная для темы
+int chosenTheme = 1;
 
 // Глобальные переменные для выбора сложности
 int chosenDifficulty = 1;
@@ -111,14 +137,16 @@ void showMenu()
     std::cout << "Пожалуйста, выберите режим игры:\n";
     std::cout << "1. Обычная игра\n";
     std::cout << "2. Мультиплеер\n";
-    std::cout << "3. Выход\n";
+    std::cout << "3. Игра по темам\n";
+    std::cout << "4. Выход\n";
     std::cout << "Ваш выбор: ";
 }
+
 
 // Визуал
 void drawHangman(int attempts)
 {
-    switch (attempts) 
+    switch (attempts)
     {
     case 6: std::cout << "  -----\n |     |\n       |\n       |\n       |\n       |\n-------\n"; break;
     case 5: std::cout << "  -----\n |     |\n O     |\n       |\n       |\n       |\n-------\n"; break;
@@ -211,15 +239,111 @@ void multiplayerMode()
 }
 
 // Бонусные приколы
-void bonusFeatures() 
+void bonusFeatures()
 {
     // Возможность открыть букву или получить право на ошибку
 }
 
-// Выбор темы слов
-void chooseWordTheme() 
+// Функция выбора темы
+void chooseTheme()
 {
-    // Реализация выбора темы
+    std::cout << "Выберите тему слов:\n";
+    std::cout << "1. Марки машин\n";
+    std::cout << "2. Древний Египет\n";
+    std::cout << "3. Космос\n";
+    std::cout << "Ваш выбор: ";
+    std::cin >> chosenTheme;
+
+    if (chosenTheme < 1 or chosenTheme > 3)
+    {
+        std::cout << "Неверный выбор. Устанавливается тема по умолчанию (Марки машин).\n";
+        chosenTheme = 1;
+    }
+}
+
+// Функция для выбора случайного слова по теме
+const char* getRandomThemedWord()
+{
+    std::srand(std::time(0));
+    switch (chosenTheme)
+    {
+    case 1: {
+        int randomIndex = std::rand() % CAR_BRANDS_COUNT;
+        return car_brands[randomIndex];
+    }
+    case 2: {
+        int randomIndex = std::rand() % EGYPT_COUNT;
+        return egypt_words[randomIndex];
+    }
+    case 3: {
+        int randomIndex = std::rand() % SPACE_COUNT;
+        return space_words[randomIndex];
+    }
+    default:
+        return "error";
+    }
+}
+
+// Режим игры по темам
+void playThemedGame()
+{
+    chooseTheme();  // Выбор темы
+    const char* word = getRandomThemedWord();
+    startTimer();   // Запуск таймера
+
+
+    std::string wordToGuess(word);
+    int wordLength = wordToGuess.length();
+    std::string guessedWord(wordLength, '_');
+    std::string guessedLetters;
+    int attempts = 6;
+
+    std::cout << "\nПопробуйте угадать слово по выбранной теме!\n";
+
+    while (attempts > 0 && guessedWord != wordToGuess)
+    {
+        std::cout << "\nСлово: " << guessedWord << "\n";
+        std::cout << "Оставшиеся попытки: " << attempts << "\n";
+        std::cout << "Введите букву: ";
+
+        char guess;
+        std::cin >> guess;
+
+        if (guessedLetters.find(guess) != std::string::npos)
+        {
+            std::cout << "Вы уже вводили эту букву!\n";
+            continue;
+        }
+
+        guessedLetters += guess;
+        bool correctGuess = false;
+
+        for (int i = 0; i < wordLength; ++i)
+        {
+            if (wordToGuess[i] == guess)
+            {
+                guessedWord[i] = guess;
+                correctGuess = true;
+            }
+        }
+
+        if (!correctGuess)
+        {
+            attempts--;
+            drawHangman(attempts);
+        }
+    }
+
+    stopTimer();  // Остановка таймера
+
+    if (guessedWord == wordToGuess)
+    {
+        std::cout << "Поздравляем! Вы угадали слово: " << wordToGuess << "\n";
+    }
+    else
+    {
+        std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << "\n";
+    }
 }
 
 // Рейтинг
@@ -245,7 +369,7 @@ void rating(int attempts, double elapsed_time, int correctGuesses, int incorrect
     std::cout << "Итоговый счёт: " << totalPoints << " очков.\n";
 }
 
-// Основная логика игры, дополненная подсчётом рейтинга
+// Основная логика игры
 void playGame()
 {
     chooseDifficulty();                 // Выбор сложности
@@ -305,6 +429,7 @@ void playGame()
 
     stopTimer();  // Остановка таймера
 
+
     // Печать результатов игры
     if (guessedWord == wordToGuess)
     {
@@ -324,6 +449,11 @@ int main()
 {
     setlocale(LC_ALL, "RUS");
 
+    #ifdef _WIN32
+    SetConsoleCP(1251);      // Устанавливаем кодировку ввода (Windows-1251)
+    SetConsoleOutputCP(1251); // Устанавливаем кодировку вывода (Windows-1251)
+    #endif
+
     while (true)
     {
         showMenu();
@@ -340,9 +470,15 @@ int main()
         }
         else if (choice == 3)
         {
+            playThemedGame();
+        }
+
+        else if (choice == 4)
+        {
             std::cout << "До свидания!\n";
             break;
         }
+
         else
         {
             std::cout << "Неверный выбор, попробуйте снова.\n";
