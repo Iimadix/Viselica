@@ -2,7 +2,7 @@
 // UPDATE Сделал игру по темам слова
 // UPDATE Пофиксил русский язык
 // TODO Надо доделать базы данных слов, чтоб отличались
-// TODO Надо добавить+доделать оформление и описание каждого режима
+// TODO Надо добавить+доделать оформление и описание каждого режима (остановлися на мультиплеере)
 // TODO Адекватно сделать комментарии
 
 
@@ -52,7 +52,14 @@ int chosenDifficulty = 1;
 // Выбор сложности
 void chooseDifficulty()
 {
-    std::cout << "Выберите уровень сложности (1 - Легкий, 2 - Средний, 3 - Тяжелый): ";
+    std::cout << std::endl;
+    std::cout << "\t\t\tДобро пожаловать в обычный режим!" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Это стандартный вариант игры в виселицу, но с небольшими фишками - в обычный режим добавлен рейтинг вашей попытки!" << std::endl;
+    std::cout << "В конце игры вы увидите оценку вашей попытки!" << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Выберите уровень сложности слова: \n1. Легкий - короткое слово (от 3 до 4 букв)\n2. Средний - слово средней длины (от 5 до 7 букв)\n3. Тяжелый - длинное слово (от 7 и более букв)\nВаш выбор: ";
     std::cin >> chosenDifficulty;
 
     if (chosenDifficulty < 1 || chosenDifficulty > 3) {
@@ -134,6 +141,9 @@ void stopTimer()
 void showMenu()
 {
     std::cout << "\t\t\tДобро пожаловать в игру \"Виселица\"\n\n";
+    std::cout << "Виселица — это игра на угадывание слов. За каждую неверную букву рисуется часть виселицы." << std::endl;
+    std::cout << "Цель — угадать слово до завершения рисунка виселицы." << std::endl;
+    std::cout << std::endl;
     std::cout << "Пожалуйста, выберите режим игры:\n";
     std::cout << "1. Обычная игра\n";
     std::cout << "2. Мультиплеер\n";
@@ -173,7 +183,10 @@ int chooseLanguage()
 // Совместная игра
 void multiplayerMode()
 {
-    std::cout << "Мультиплеер: Первый игрок загадывает слово, второй отгадывает.\n";
+    std::cout << "\t\t\tДобро пожаловать в режим - МУЛЬТИПЛЕЕР" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Суть режима - Первый игрок загадывает слово, второй пытается его отгадать!" << std::endl;
+    std::cout << std::endl;
 
     // Ввод слова первым игроком
     std::string wordToGuess;
@@ -194,8 +207,8 @@ void multiplayerMode()
 
     while (attempts > 0 && guessedWord != wordToGuess)
     {
-        std::cout << "\nСлово: " << guessedWord << "\n";
-        std::cout << "Оставшиеся попытки: " << attempts << "\n";
+        std::cout << "\nСлово: " << guessedWord << std::endl;
+        std::cout << "Оставшиеся попытки: " << attempts << std::endl;
         std::cout << "Введите букву: ";
 
         char guess;
@@ -226,16 +239,16 @@ void multiplayerMode()
         }
     }
 
-    stopTimer();
-
     if (guessedWord == wordToGuess)
     {
-        std::cout << "Поздравляем! Второй игрок угадал слово: " << wordToGuess << "\n";
+        std::cout << "Поздравляем! Второй игрок угадал слово: " << wordToGuess << std::endl;
     }
     else
     {
-        std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << "\n";
+        std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << std::endl;
     }
+
+    stopTimer();
 }
 
 // Бонусные приколы
@@ -280,7 +293,7 @@ const char* getRandomThemedWord()
         return space_words[randomIndex];
     }
     default:
-        return "error";
+        return "ошибка";
     }
 }
 
@@ -302,8 +315,8 @@ void playThemedGame()
 
     while (attempts > 0 && guessedWord != wordToGuess)
     {
-        std::cout << "\nСлово: " << guessedWord << "\n";
-        std::cout << "Оставшиеся попытки: " << attempts << "\n";
+        std::cout << "\nСлово: " << guessedWord << std::endl;
+        std::cout << "Оставшиеся попытки: " << attempts << std::endl;
         std::cout << "Введите букву: ";
 
         char guess;
@@ -338,11 +351,11 @@ void playThemedGame()
 
     if (guessedWord == wordToGuess)
     {
-        std::cout << "Поздравляем! Вы угадали слово: " << wordToGuess << "\n";
+        std::cout << "Поздравляем! Вы угадали слово: " << wordToGuess << std::endl;
     }
     else
     {
-        std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << "\n";
+        std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << std::endl;
     }
 }
 
@@ -362,11 +375,14 @@ void rating(int attempts, double elapsed_time, int correctGuesses, int incorrect
     int totalPoints = pointsForCorrectGuesses - penaltyForIncorrectGuesses - timePenalty;
 
     // Печатаем результаты
-    std::cout << "Рейтинг:\n";
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------" << std::endl;
+    std::cout << "Рейтинг вашей игры:\n";
     std::cout << "Правильные буквы: " << correctGuesses << " (+" << pointsForCorrectGuesses << " очков)\n";
     std::cout << "Неправильные буквы: " << incorrectGuesses << " (-" << penaltyForIncorrectGuesses << " очков)\n";
     std::cout << "Время: " << elapsed_time << " секунд (-" << timePenalty << " очков)\n";
     std::cout << "Итоговый счёт: " << totalPoints << " очков.\n";
+    std::cout << "-------------------------------------------------------" << std::endl;
 }
 
 // Основная логика игры
@@ -385,13 +401,13 @@ void playGame()
     int correctGuesses = 0;  // Количество угаданных букв
     int incorrectGuesses = 0;  // Количество неправильных букв
 
-    std::cout << "Загаданное слово (для теста): " << wordToGuess << "\n";
+    std::cout << "Загаданное слово (для теста): " << wordToGuess << std::endl;
     std::cout << "Попробуйте угадать слово!\n";
 
     while (attempts > 0 && guessedWord != wordToGuess)
     {
-        std::cout << "\nСлово: " << guessedWord << "\n";
-        std::cout << "Оставшиеся попытки: " << attempts << "\n";
+        std::cout << "\nСлово: " << guessedWord << std::endl;
+        std::cout << "Оставшиеся попытки: " << attempts << std::endl;
         std::cout << "Введите букву: ";
 
         char guess;
@@ -427,18 +443,18 @@ void playGame()
         }
     }
 
-    stopTimer();  // Остановка таймера
-
 
     // Печать результатов игры
     if (guessedWord == wordToGuess)
     {
-        std::cout << "Поздравляем! Вы угадали слово: " << wordToGuess << "\n";
+        std::cout << "Поздравляем! Вы угадали слово: " << wordToGuess << std::endl;
     }
     else
     {
-        std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << "\n";
+        std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << std::endl;
     }
+
+    stopTimer(); // Остановка таймера
 
     // Вызов функции для подсчёта рейтинга
     rating(attempts, std::difftime(stop_time, start_time), correctGuesses, incorrectGuesses);
@@ -449,10 +465,10 @@ int main()
 {
     setlocale(LC_ALL, "RUS");
 
-    #ifdef _WIN32
+#ifdef _WIN32
     SetConsoleCP(1251);      // Устанавливаем кодировку ввода (Windows-1251)
     SetConsoleOutputCP(1251); // Устанавливаем кодировку вывода (Windows-1251)
-    #endif
+#endif
 
     while (true)
     {
