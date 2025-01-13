@@ -1,6 +1,3 @@
-// TODO Надо доделать базы данных слов, чтоб отличались
-
-
 // Основные библиотеки для работы кода
 #include <iostream>
 #include <string>
@@ -47,13 +44,6 @@ int chosenDifficulty = 1;
 // Выбор сложности
 void chooseDifficulty()
 {
-    // Описание обычного режима
-    std::cout << std::endl;
-    std::cout << "\t\t\tДобро пожаловать в обычный режим!" << std::endl;
-    std::cout << std::endl;
-    std::cout << "Это стандартный вариант игры в виселицу, но с небольшими фишками - в обычный режим добавлен рейтинг вашей попытки!" << std::endl;
-    std::cout << "В конце игры вы увидите оценку вашей попытки!" << std::endl;
-    std::cout << std::endl;
 
     // Выбор сложности слова
     std::cout << "Выберите уровень сложности слова: \n1. Легкий - короткое слово (от 3 до 4 букв)\n2. Средний - слово средней длины (от 5 до 7 букв)\n3. Тяжелый - длинное слово (от 7 и более букв)\nВаш выбор: ";
@@ -70,7 +60,7 @@ void chooseDifficulty()
 // Функция для выбора случайного слова в зависимости от языка и сложности
 const char* getRandomWord(int language)
 {
-    std::srand(std::time(0));
+    srand(time(nullptr));
 
     // Русский язык
     if (language == 1)
@@ -148,7 +138,8 @@ void showMenu()
     std::cout << "1. Обычная игра\n";
     std::cout << "2. Мультиплеер\n";
     std::cout << "3. Игра по темам\n";
-    std::cout << "4. Выход\n";
+    std::cout << "4. Бесконечный режим\n";
+    std::cout << "5. Выход\n";
     std::cout << "Ваш выбор: ";
 }
 
@@ -370,6 +361,107 @@ void playThemedGame()
     stopTimer();  // Остановка таймера
 }
 
+// Бесконечная игра
+void endlessMode()
+{
+    // Описание режима + вступительный текст
+    std::cout << "\t\t\tДобро пожаловать в БЕСКОНЕЧНЫЙ РЕЖИМ" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Суть режима - У вас бесокнечное кол-во попыток, вы не сможете проиграть." << std::endl;
+    std::cout << std::endl;
+
+    // Выбор языка и сложности
+    int language = chooseLanguage();
+    chooseDifficulty();
+
+    int guessedWords = 0;    // Счётчик угаданных слов
+    int missedWords = 0;     // Счётчик неугаданных слов
+
+    while (true)
+    {
+        const char* word = getRandomWord(language);  // Получение случайного слова
+        std::string wordToGuess(word);
+        int wordLength = wordToGuess.length();
+        std::string guessedWord(wordLength, '_');
+        std::string guessedLetters;
+        int attempts = 6;
+
+        std::cout << "\nЗагадано новое слово. Начнём!\n";
+        drawHangman(attempts);  // Отображаем начальное состояние виселицы
+
+        while (attempts > 0 && guessedWord != wordToGuess)
+        {
+            std::cout << "\nСлово: " << guessedWord << "\n";
+            std::cout << "Оставшиеся попытки: " << attempts << "\n";
+            std::cout << "Введите букву: ";
+
+            char guess;
+            std::cin >> guess;
+
+            if (guessedLetters.find(guess) != std::string::npos)
+            {
+                std::cout << "Вы уже вводили эту букву!\n";
+                continue;
+            }
+
+            guessedLetters += guess;
+            bool correctGuess = false;
+
+            for (int i = 0; i < wordLength; ++i)
+            {
+                if (wordToGuess[i] == guess)
+                {
+                    guessedWord[i] = guess;
+                    correctGuess = true;
+                }
+            }
+
+            if (correctGuess)
+            {
+                std::cout << "Правильно!\n";
+            }
+            else
+            {
+                std::cout << "Неправильно!\n";
+                attempts--;
+                drawHangman(attempts);
+            }
+        }
+
+        // Результаты для текущего слова
+        if (guessedWord == wordToGuess)
+        {
+            std::cout << "Поздравляем! Вы угадали слово: " << wordToGuess << "\n";
+            guessedWords++;
+        }
+        else
+        {
+            std::cout << "Вы не угадали. Слово было: " << wordToGuess << "\n";
+            missedWords++;
+        }
+
+        // Мини-статистика
+        std::cout << "\nСтатистика:\n";
+        std::cout << "Угаданных слов: " << guessedWords << "\n";
+        std::cout << "Неугаданных слов: " << missedWords << "\n";
+
+        // Выбор действия
+        std::cout << "\nХотите продолжить? (1 - Да, 0 - Выйти): ";
+        int choice;
+        std::cin >> choice;
+
+        if (choice == 0)
+        {
+            std::cout << "Выход из бесконечного режима.\n";
+            break;
+        }
+
+        // Сбрасываем экран виселицы
+        std::cout << std::string(50, '\n');  // Очистка экрана
+    }
+}
+
+
 // Рейтинг
 void rating(int attempts, double elapsed_time, int correctGuesses, int incorrectGuesses)
 {
@@ -399,6 +491,16 @@ void rating(int attempts, double elapsed_time, int correctGuesses, int incorrect
 // Стандартный режим
 void playGame()
 {
+
+    // Описание обычного режима
+    std::cout << std::endl;
+    std::cout << "\t\t\tДобро пожаловать в обычный режим!" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Это стандартный вариант игры в виселицу, но с небольшими фишками - в обычный режим добавлен рейтинг вашей попытки!" << std::endl;
+    std::cout << "В конце игры вы увидите оценку вашей попытки!" << std::endl;
+    std::cout << std::endl;
+
+
     chooseDifficulty();                 // Выбор сложности
     int language = chooseLanguage();    // Выбор языка
     const char* word = getRandomWord(language); // Получение случайного слова
@@ -477,6 +579,7 @@ void playGame()
 // Основная функция
 int main()
 {
+
 #ifdef _WIN32
     SetConsoleCP(1251);      // Устанавливаем кодировку ввода (Windows-1251)
     SetConsoleOutputCP(1251); // Устанавливаем кодировку вывода (Windows-1251)
@@ -505,6 +608,11 @@ int main()
         }
 
         else if (choice == 4)
+        {
+            endlessMode();
+        }
+
+        else if (choice == 5)
         {
             std::cout << "До свидания!\n";
             break;
