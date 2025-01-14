@@ -50,7 +50,7 @@ void chooseDifficulty()
     std::cin >> chosenDifficulty;
 
     // Проверка на правильность ввода + выбор дефолтной сложности
-    if (chosenDifficulty < 1 or chosenDifficulty > 3) 
+    if (chosenDifficulty < 1 or chosenDifficulty > 3)
     {
         std::cout << "Неверный выбор. Устанавливается уровень сложности по умолчанию (Легкий).\n";
         chosenDifficulty = 1;
@@ -128,7 +128,8 @@ void stopTimer()
 
 // Меню пользователя
 void showMenu()
-{   
+{
+    std::cout << std::endl;
     // Основное меню и описание игры
     std::cout << "\t\t\tДобро пожаловать в игру \"Виселица\"\n\n";
     std::cout << "Виселица — это игра на угадывание слов. За каждую неверную букву рисуется часть виселицы." << std::endl;
@@ -160,7 +161,8 @@ void drawHangman(int attempts)
 
 // Выбор языка слова
 int chooseLanguage()
-{
+{   
+    std::cout << std::endl;
     // Описание функции
     std::cout << "Выберите язык слова:\n";
     std::cout << "1. Русский\n";
@@ -174,7 +176,7 @@ int chooseLanguage()
 
 // Совместная игра
 void multiplayerMode()
-{   
+{
     // Описание режима + вступительный текст
     std::cout << "\t\t\tДобро пожаловать в режим - МУЛЬТИПЛЕЕР" << std::endl;
     std::cout << std::endl;
@@ -238,11 +240,13 @@ void multiplayerMode()
 
     // Проверка на то, угадал ли человек слово
     if (guessedWord == wordToGuess)
-    {
+    {   
+        std::cout << std::endl;
         std::cout << "Поздравляем! Второй игрок угадал слово: " << wordToGuess << std::endl;
     }
     else
-    {
+    {   
+        std::cout << std::endl;
         std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << std::endl;
     }
 
@@ -259,7 +263,7 @@ void chooseTheme()
     std::cout << "Суть режима - вы выбираете тему и по этой теме будет загадано!" << std::endl;
     std::cout << std::endl;
     std::cout << "Выберите тему слов:\n";
-    std::cout << "1. Марки машин\n";
+    std::cout << "1. Марки машин (ENG):\n";
     std::cout << "2. Древний Египет\n";
     std::cout << "3. Космос\n";
     std::cout << "Ваш выбор: ";
@@ -350,11 +354,13 @@ void playThemedGame()
 
     // Проверка на то, отгадал ли человек слово
     if (guessedWord == wordToGuess)
-    {
+    {   
+        std::cout << std::endl;
         std::cout << "Поздравляем! Вы угадали слово: " << wordToGuess << std::endl;
     }
     else
-    {
+    {   
+        std::cout << std::endl;
         std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << std::endl;
     }
 
@@ -430,12 +436,14 @@ void endlessMode()
 
         // Результаты для текущего слова
         if (guessedWord == wordToGuess)
-        {
+        {   
+            std::cout << std::endl;
             std::cout << "Поздравляем! Вы угадали слово: " << wordToGuess << "\n";
             guessedWords++;
         }
         else
-        {
+        {   
+            std::cout << std::endl;
             std::cout << "Вы не угадали. Слово было: " << wordToGuess << "\n";
             missedWords++;
         }
@@ -516,6 +524,7 @@ void playGame()
     int correctGuesses = 0;  // Количество угаданных букв
     int incorrectGuesses = 0;  // Количество неправильных букв
 
+    std::cout << std::endl;
     std::cout << "Загаданное слово (для теста): " << wordToGuess << std::endl;
     std::cout << "Попробуйте угадать слово!" << std::endl;
 
@@ -563,10 +572,12 @@ void playGame()
     // Проврека на то, отгадал ли человек слово
     if (guessedWord == wordToGuess)
     {
+        std::cout << std::endl;
         std::cout << "Поздравляем! Вы угадали слово: " << wordToGuess << std::endl;
     }
     else
-    {
+    {   
+        std::cout << std::endl;
         std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << std::endl;
     }
 
