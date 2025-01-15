@@ -1,7 +1,6 @@
 // Основные библиотеки для работы кода
 #include <iostream>
 #include <string>
-#include <ctime>
 
 // Доп функция, чтобы работал русский язык
 #ifdef _WIN32
@@ -161,7 +160,7 @@ void drawHangman(int attempts)
 
 // Выбор языка слова
 int chooseLanguage()
-{   
+{
     std::cout << std::endl;
     // Описание функции
     std::cout << "Выберите язык слова:\n";
@@ -240,12 +239,12 @@ void multiplayerMode()
 
     // Проверка на то, угадал ли человек слово
     if (guessedWord == wordToGuess)
-    {   
+    {
         std::cout << std::endl;
         std::cout << "Поздравляем! Второй игрок угадал слово: " << wordToGuess << std::endl;
     }
     else
-    {   
+    {
         std::cout << std::endl;
         std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << std::endl;
     }
@@ -354,12 +353,12 @@ void playThemedGame()
 
     // Проверка на то, отгадал ли человек слово
     if (guessedWord == wordToGuess)
-    {   
+    {
         std::cout << std::endl;
         std::cout << "Поздравляем! Вы угадали слово: " << wordToGuess << std::endl;
     }
     else
-    {   
+    {
         std::cout << std::endl;
         std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << std::endl;
     }
@@ -436,13 +435,13 @@ void endlessMode()
 
         // Результаты для текущего слова
         if (guessedWord == wordToGuess)
-        {   
+        {
             std::cout << std::endl;
             std::cout << "Поздравляем! Вы угадали слово: " << wordToGuess << "\n";
             guessedWords++;
         }
         else
-        {   
+        {
             std::cout << std::endl;
             std::cout << "Вы не угадали. Слово было: " << wordToGuess << "\n";
             missedWords++;
@@ -576,7 +575,7 @@ void playGame()
         std::cout << "Поздравляем! Вы угадали слово: " << wordToGuess << std::endl;
     }
     else
-    {   
+    {
         std::cout << std::endl;
         std::cout << "Вы проиграли. Загаданное слово было: " << wordToGuess << std::endl;
     }
